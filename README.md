@@ -1,0 +1,1 @@
+# Ct-Verificador-de-certificados-digitales-Colegio-Nacional-de-Educaci-n-Profesional-Tecnica
