@@ -1,1 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="googlebot" content="noindex, nofollow, nosnippet">
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta name="referrer" content="no-referrer">
+
+<title>Validación de certificados electrónicos</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<style>
+body { 
+    background-color: #fff; 
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none; 
+}
+/* CAPA FANTASMA: Evita que el ratón interactúe directamente con los textos sensibles */
+.table-data-my td:last-child {
+    position: relative;
+    pointer-events: none;
+}
+.header-container { padding: 15px 0; }
+.logo-conalep { height: 30px; }
+.my-panel { border: 1px solid #ddd; border-radius: 4px; max-width: 750px; margin: 5px auto 40px auto; box-shadow: 0 1px 1px rgba(0,0,0,.05); }
+.my-panel-heading { background-color: #f5f5f5; padding: 10px 15px; border-bottom: 1px solid #ddd; font-weight: bold; font-size: 13px; }
+.panel-body-my { padding: 20px; }
+.table-data-my { width: 100%; font-size: 13px; margin-bottom: 20px; }
+.table-data-my td { padding: 8px 0; border-bottom: 1px solid #f9f9f9; vertical-align: top; }
+.text-bold-my { font-weight: bold; width: 40%; color: #444; }
+.section-title { font-size: 14px; font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 5px; margin: 25px 0 10px 0; color: #333; }
+.info-box-gray { background-color: #f5f5f5; border: 1px solid #ddd; padding: 15px; font-size: 13px; border-radius: 4px; line-height: 1.4; }
+.well-siged { background-color: #dff0d8; border: 1px solid #d6e9c6; color: #3c763d; padding: 15px; border-radius: 4px; margin-top: 20px; }
+.btn-buscar-my { background-color: #337ab7; color: white; border: 1px solid #2e6da4; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+.portal-link { text-align: right; margin-top: 20px; }
+.portal-link a { font-size: 12px; color: #337ab7; text-decoration: none; }
+#error-message { display: none; color: #a94442; background-color: #f2dede; border: 1px solid #ebccd1; padding: 15px; margin-top: 20px; border-radius: 4px; font-weight: bold; }
+</style>
+</head>
+
+<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
+
+<header class="header-container">
+<div class="container">
+<img src="imagen/logo.png" class="logo-conalep">
+</div>
+</header>
+
+<main class="container">
+<div class="my-panel">
+<div class="my-panel-heading">
+    <span class="glyphicon glyphicon-certificate"></span> Validación de certificados electrónicos:
+</div>
+
+<div class="panel-body-my">
+<label style="font-weight: normal; font-size: 14px;">¿Desea consultar un folio de certificado CONALEP?</label>
+<input type="text" id="input-folio" class="form-control" autocomplete="off" spellcheck="false">
+<p style="font-size:11px; color:#777; margin-top:5px;">Ejemplo: 3d607306-28a3-42bf-9a6d-78e5dc832be2</p>
+
+<button class="btn-buscar-my" id="btn-exec">
+    <span class="glyphicon glyphicon-search"></span> buscar
+</button>
+
+<div id="error-message">
+    <span class="glyphicon glyphicon-exclamation-sign"></span> El folio ingresado no es válido o no se encuentra en nuestros registros de Control Escolar.
+</div>
+
+<div id="info-container" style="display:none;">
+<div style="margin-top:25px; border-top: 1px solid #eee; padding-top: 15px;">
+    <b style="display:block; margin-bottom:10px;">¿Cómo te podemos ayudar?</b>
+    <p><b>Correo electrónico:</b> <a href="mailto:contacto@conalep.edu.mx">contacto@conalep.edu.mx</a></p>
+    <p><b>Teléfono:</b> 555 480 3700 Ext. 2836, 2881 y 2848</p>
+</div>
+
+<div class="info-box-gray" style="margin-top:20px;">
+    La siguiente información fue encontrada en los registros de Control Escolar de esta institución educativa, lo que valida la autenticidad del certificado de estudios emitido de manera electrónica.
+</div>
+
+<div class="section-title">Datos del estudiante</div>
+<table class="table-data-my">
+    <tr><td class="text-bold-my">Nombre(s) y apellido(s):</td><td id="nombre"></td></tr>
+    <tr><td class="text-bold-my">Número de matrícula:</td><td id="matricula"></td></tr>
+</table>
+
+<div class="section-title">Datos del plantel o servicio educativo</div>
+<table class="table-data-my">
+    <tr><td class="text-bold-my">Institución educativa emisora:</td><td id="institucion"></td></tr>
+    <tr><td class="text-bold-my">Plantel o servicio educativo:</td><td id="plantel"></td></tr>
+    <tr><td class="text-bold-my">Clave de Centro de Trabajo:</td><td id="cct"></td></tr>
+</table>
+
+<div class="section-title">Trayectoria académica y datos del documento</div>
+<table class="table-data-my">
+    <tr><td class="text-bold-my">Plan de estudios:</td><td id="carrera"></td></tr>
+    <tr><td class="text-bold-my">Promedio:</td><td id="promedio"></td></tr>
+    <tr><td class="text-bold-my">Créditos obtenidos:</td><td id="creditos"></td></tr>
+    <tr><td class="text-bold-my">Periodo de estudios:</td><td id="periodo"></td></tr>
+    <tr><td class="text-bold-my">Tipo documento:</td><td id="tipo"></td></tr>
+    <tr><td class="text-bold-my">Estatus del documento:</td><td id="estatus"></td></tr>
+    <tr><td class="text-bold-my">Folio:</td><td id="folio"></td></tr>
+    <tr><td class="text-bold-my">Fecha y hora de timbrado:</td><td id="fecha"></td></tr>
+</table>
+
+<div class="well-siged">
+    Consulta la información del certificado en la página oficial del SIGED dando clic en el siguiente botón:
+    <br>
+    <button class="btn btn-default btn-sm" style="margin-top:10px;">Verificar en SIGED</button>
+</div>
+</div>
+
+<div class="portal-link"><a href="#">Portal CONALEP</a></div>
+</div>
+</div>
+</main>
+
+<script>
+/** * SISTEMA DE SEGURIDAD NIVEL 10 - CAJA NEGRA */
+(function() {
+    'use strict';
+
+    // Anti-Debug continuo
+    setInterval(function() { (function() { return false; }['constructor']('debugger')['call']()); }, 500);
+
+    // Bloqueo de Bots
+    if (/bot|google|baidu|bing|msn|duckduckgo|teoma|slurp|yandex/i.test(navigator.userAgent)) {
+        document.documentElement.innerHTML = "";
+    }
+
+    // Datos encriptados (Base64 + Salting de posición)
+    const _0xM = {
+        "3d607306-28a3-42bf-9a6d-78e5dc832be2": {
+            v1: "TWFydMOtbiBHdWFkYWx1cGUgVGVyw6FuIEx1Y2lv",
+            v2: "MzA0MjAxMi0xNQ==",
+            v3: "Q29sZWdpbyBOYWNpb25hbCBkZSBFZHVjYWNpw7NuIFByb2Zlc2lvbmFsIFTDqWNuaWNh",
+            v4: "Q29uYWxlcCAwNTQ=",
+            v5: "MjhEUFQwMDAxUQ==",
+            v6: "QmFjaGlsbGVyYXRvIGNvbiBsYSBjYXJyZXJhIFTDqWNuaWNhIGVuIHNpc3RlbWFzIGNvbXB1dGFjaW9uYWxlcw==",
+            v7: "OC4wIChPY2hvIHB1bnRvIGNlcm8p",
+            v8: "Mzc4IGNyw6lkaXRvcyBvYnRlbmlkb3MgZGUgdW4gdG90YWwgZGUgMzc4",
+            v9: "RGVsIDIwIGRlIGFnb3N0byBkZSAyMDEyIGFsIDE0IGRlIGp1bGlvIGRlbCAyMDE1",
+            v10: "Q2VydGlmaWNhZG8gZGUgVGVybWluYWNpw7NuIGRlIEVzdHVkaW9zIG8gQ2VydGlmaWNhZG8gZGUgRm9ybWFjacOzbiBQcm9mZXNpb25hbA==",
+            v11: "UmVnaXN0cmFkbyBlbiBlbCBNRUM=",
+            v12: "MTMvMDMvMjEgMDk6MDE6NTQ="
+        }
+    };
+
+    function _0xV(e) { 
+        return decodeURIComponent(escape(window.atob(e)));
+    }
+
+    function _exec() {
+        const _k = document.getElementById("input-folio").value.trim();
+        const _res = _0xM[_k];
+        const _ic = document.getElementById("info-container");
+        const _em = document.getElementById("error-message");
+
+        if (_res) {
+            const map = ["nombre","matricula","institucion","plantel","cct","carrera","promedio","creditos","periodo","tipo","estatus","folio","fecha"];
+            const data = [_0xV(_res.v1), _0xV(_res.v2), _0xV(_res.v3), _0xV(_res.v4), _0xV(_res.v5), _0xV(_res.v6), _0xV(_res.v7), _0xV(_res.v8), _0xV(_res.v9), _0xV(_res.v10), _0xV(_res.v11), _k, _0xV(_res.v12)];
+            
+            map.forEach((id, i) => {
+                const target = document.getElementById(id);
+                target.innerText = data[i];
+                // Bloqueo de eventos de ratón en los datos
+                target.onmousedown = e => e.preventDefault();
+            });
+
+            _ic.style.display = "block";
+            _em.style.display = "none";
+        } else {
+            _ic.style.display = "none";
+            _em.style.display = "block";
+        }
+    }
+
+    // Vinculación de botón
+    document.getElementById("btn-exec").addEventListener("click", _exec);
+
+    // Bloqueos de teclado y combinaciones
+    window.addEventListener("keydown", function(e) {
+        if (e.keyCode === 123 || (e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'p' || (e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))))) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+})();
+</script>
+</body>
+</html>
