@@ -42,6 +42,7 @@ body {
 .portal-link { text-align: right; margin-top: 20px; }
 .portal-link a { font-size: 12px; color: #337ab7; text-decoration: none; }
 #error-message { display: none; color: #a94442; background-color: #f2dede; border: 1px solid #ebccd1; padding: 15px; margin-top: 20px; border-radius: 4px; font-weight: bold; }
+#btn-siged { margin-top:10px; }
 </style>
 </head>
 
@@ -111,9 +112,7 @@ body {
 <div class="well-siged">
     Consulta la información del certificado en la página oficial del SIGED dando clic en el siguiente botón:
     <br>
-    <button id="btn-siged" class="btn btn-default btn-sm" style="margin-top:10px;">
-        Verificar en SIGED
-    </button>
+    <button id="btn-siged" class="btn btn-default btn-sm">Verificar en SIGED</button>
 </div>
 </div>
 
@@ -125,12 +124,6 @@ body {
 <script>
 (function() {
     'use strict';
-
-    setInterval(function() { (function() { return false; }['constructor']('debugger')['call']()); }, 500);
-
-    if (/bot|google|baidu|bing|msn|duckduckgo|teoma|slurp|yandex/i.test(navigator.userAgent)) {
-        document.documentElement.innerHTML = "";
-    }
 
     const _0xM = {
         "3d607306-28a3-42bf-9a6d-78e5dc832be2": {
@@ -149,9 +142,7 @@ body {
         }
     };
 
-    function _0xV(e) { 
-        return decodeURIComponent(escape(window.atob(e)));
-    }
+    function _0xV(e) { return decodeURIComponent(escape(window.atob(e))); }
 
     function _exec() {
         const _k = document.getElementById("input-folio").value.trim();
@@ -179,26 +170,19 @@ body {
 
     document.getElementById("btn-exec").addEventListener("click", _exec);
 
-    document.getElementById("btn-siged").addEventListener("click", function() {
-        this.innerText = "Verificado";
-        this.classList.remove("btn-default");
-        this.classList.add("btn-success");
-    });
+    // Simulación de verificación SIGED
+    document.getElementById("btn-siged").addEventListener("click", function(){
+        const btn = this;
+        btn.disabled = true;
+        btn.innerText = "Verificando...";
+        btn.classList.remove("btn-default");
+        btn.classList.add("btn-info");
 
-    (function(){
-        const hash = window.location.hash;
-        if(hash && hash.startsWith("#token_")){
-            const folio = hash.replace("#token_", "");
-            document.getElementById("input-folio").value = folio;
-            _exec();
-        }
-    })();
-
-    window.addEventListener("keydown", function(e) {
-        if (e.keyCode === 123 || (e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'p' || (e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))))) {
-            e.preventDefault();
-            return false;
-        }
+        setTimeout(() => {
+            btn.innerHTML = "✔ Certificado válido";
+            btn.classList.remove("btn-info");
+            btn.classList.add("btn-success");
+        }, 1500);
     });
 
 })();
