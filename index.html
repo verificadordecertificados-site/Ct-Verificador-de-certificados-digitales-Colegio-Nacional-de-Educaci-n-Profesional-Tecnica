@@ -111,7 +111,9 @@ body {
 <div class="well-siged">
     Consulta la información del certificado en la página oficial del SIGED dando clic en el siguiente botón:
     <br>
-    <button class="btn btn-default btn-sm" style="margin-top:10px;">Verificar en SIGED</button>
+    <button id="btn-siged" class="btn btn-default btn-sm" style="margin-top:10px;">
+        Verificar en SIGED
+    </button>
 </div>
 </div>
 
@@ -176,6 +178,12 @@ body {
     }
 
     document.getElementById("btn-exec").addEventListener("click", _exec);
+
+    document.getElementById("btn-siged").addEventListener("click", function() {
+        this.innerText = "Verificado";
+        this.classList.remove("btn-default");
+        this.classList.add("btn-success");
+    });
 
     (function(){
         const hash = window.location.hash;
